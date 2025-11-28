@@ -24,6 +24,18 @@ faqItems.forEach((item) => {
 // ===== CTA click events（計測フック） =====
 document.querySelectorAll("[data-event]").forEach((el) => {
   el.addEventListener("click", () => {
-    console.log("EVENT:", el.dataset.event);
+    const eventName = el.dataset.event;
+
+    // デバッグ用ログ
+    console.log("EVENT:", eventName);
+
+    // GA4 にイベント送信
+    if (typeof gtag === "function" && eventName) {
+      gtag("event", eventName, {
+        event_category: "lp",
+        event_label: window.location.pathname
+      });
+    }
   });
 });
+
