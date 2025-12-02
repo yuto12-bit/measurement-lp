@@ -3,12 +3,25 @@ const toggle = document.querySelector(".header__toggle");
 const nav = document.querySelector(".header__nav");
 
 if (toggle && nav) {
+  // ハンバーガー開閉
   toggle.addEventListener("click", () => {
     const open = nav.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
   });
-}
 
+  // ★追加：メニュー内リンクをクリックしたら閉じる
+  nav.addEventListener("click", (event) => {
+    const link = event.target.closest("a");
+    if (!link) return;
+
+    // #から始まるセクションリンクだけを対象にする
+    const href = link.getAttribute("href") || "";
+    if (!href.startsWith("#")) return;
+
+    nav.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+  });
+}
 // ===== FAQ Accordion =====
 const faqItems = document.querySelectorAll(".faq__item");
 
