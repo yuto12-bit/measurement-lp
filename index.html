@@ -226,9 +226,8 @@
 
     <div class="contact__form-wrapper">
       
-      <form action="https://script.google.com/macros/s/AKfycbybwIROw2J5CpdYszAQph-5wRwN1qfraXid8I4uSuNKDsAfTsYXkS0wTNi82RXp3wFz/exec"
-      method="POST" 
-      class="form">
+      <form id="contactForm" class="form">
+
   <input type="hidden" name="source" value="measurement-lp">
 
   <div class="form__group">
@@ -295,8 +294,38 @@
   </div>
 </footer>
 
-<!-- JS -->
 <script src="script.js"></script>
 
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // デフォルトの送信（画面遷移）をキャンセル
+    
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    // 二重送信防止＆ローディング表示
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中...';
+
+    // FormDataを作成
+    const formData = new FormData(form);
+
+    // あなたのGAS WebアプリURL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbybwIROw2J5CpdYszAQph-5wRwN1qfraXid8I4uSuNKDsAfTsYXkS0wTNi82RXp3wFz/exec';
+
+    fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors'})
+      .then(response => {
+        // 成功したらThanksページへ遷移
+        window.location.href = 'thanks.html';
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert('送信に失敗しました。もう一度お試しください。');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      });
+  });
+</script>
 </body>
 </html>
